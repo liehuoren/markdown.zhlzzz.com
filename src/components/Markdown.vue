@@ -1,110 +1,87 @@
 <template>
-  <div class="layout">
-    <Layout>
-        <Header>
-          <Menu mode="horizontal" theme="dark" active-name="1">
-            <div class="layout-logo"><h1>在线markdown编辑器</h1></div>
-            <div class="layout-nav">
-              <MenuItem name="1">
-                <Icon type="ios-navigate"></Icon>
-                <a href="https://blog.zhlzzz.com/markdown/e9cc80ad">帮助文档</a>
-              </MenuItem>
-            </div>
-          </Menu>
-        </Header>
-        <Content>
-          <markdown-editor v-model="content" ref="markdownEditor" :configs="configs" :sanitize="true" :highlight="true"></markdown-editor>
-        </Content>
-        <Footer class="layout-footer-center">2017-2018 &copy; <a target="_blank" href="https://blog.zhlzzz.com">z.h.l</a></Footer>
-    </Layout>
+  <div class="indexContainer">
+    <div id="editor">
+      <mavon-editor
+        :subfield = "subfield"
+        :code_style="code_style"
+        :ishljs="true"
+        :external_link="external_link"
+        ></mavon-editor>
+    </div>
+    <div class="footer">2017 &copy; <a href="https://blog.zhlzzz.com">z.h.l</a> </div>
   </div>
 </template>
 
 <script>
-import markdownEditor from 'vue-simplemde/src/markdown-editor'
-import hljs from 'highlight.js'
+import { mavonEditor } from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
 
 export default {
-  name: 'markdown',
+  name: 'editor',
   data () {
     return {
-      content: '',
-      configs: {
-        autofocus: true,
-        status: false, // 禁用底部状态栏
-        spellChecker: false, // 禁用拼写检查
-        autosave: {
-          enabled: true,
-          delay: 300000,
-          uniqueId: 'zhlzzz_markdown'
+      subfield: true,
+      code_style: 'solarized-dark',
+      external_link: {
+        markdown_css: function () {
+          // 这是你的markdown css文件路径
+          return '/markdown/github-markdown.min.css'
         },
-        promptURLs: false,
-        hideIcons: ['guide'],
-        renderingConfig: {
-          singleLineBreaks: true,
-          codeSyntaxHighlighting: true
+        hljs_js: function () {
+          // 这是你的hljs文件路径
+          return '/highlightjs/highlight.min.js'
+        },
+        hljs_css: function (css) {
+          // 这是你的代码高亮配色文件路径
+          return '/highlightjs/styles/' + css + '.min.css'
+        },
+        hljs_lang: function (lang) {
+          // 这是你的代码高亮语言解析路径
+          return '/highlightjs/languages/' + lang + '.min.js'
+        },
+        katex_css: function () {
+          // 这是你的katex配色方案路径路径
+          return '/katex/katex.min.css'
+        },
+        katex_js: function () {
+          // 这是你的katex.js路径
+          return '/katex/katex.min.js'
         }
       }
     }
   },
   components: {
-    markdownEditor
-  },
-  methods: {
-
-  },
-  mounted () {
-    // this.simplemde.toggleSideBySide()
-  },
-  computed: {
-    simplemde () {
-      return this.$refs.markdownEditor.simplemde
-    }
+    mavonEditor
   }
 }
-window.hljs = hljs
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-@import 'simplemde/dist/simplemde.min.css';
-/* @import 'github-markdown-css'; */
-@import 'highlight.js/styles/atom-one-dark.css';
-.markdown-editor .CodeMirror, .markdown-editor .CodeMirror-scroll {
-  min-height: 768px;
+.indexContainer{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  background: #f6f8f9;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  position: relative;
 }
-.layout{
-    border: 1px solid #d7dde4;
-    background: #f5f7f9;
-    position: relative;
-    border-radius: 4px;
-    overflow: hidden;
+#editor {
+    width: 90%;
+    height: 90%;
+    margin: auto;
+    border: 1px solid #eee;
 }
-.layout-logo{
-    height: 30px;
-    border-radius: 3px;
-    float: left;
-    position: relative;
-    top: 15px;
-    left: 20px;
-    line-height: 30px;
+.markdown-body{
+    width: 100%;
+    height: 100%;
 }
-.layout-logo h1{
-    font-size: 24px;
-    color:#d7dde4;
-}
-.layout-nav{
-    width: 420px;
-    margin: 0 auto;
-    margin-right: 20px;
-}
-.layout-footer-center{
-    text-align: center;
-}
-.ivu-menu{
-  z-index: 1!important;
-}
-.markdown-editor{
-  font-size: 16px;
+.footer{
+  position: fixed;
+  bottom: 5px;
 }
 </style>
